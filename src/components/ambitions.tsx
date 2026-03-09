@@ -1,89 +1,34 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-
-const ambitions = [
-  {
-    title: "Build something used by millions.",
-    description:
-      "I want to ship a product that genuinely improves how people work or live — something that reaches real scale and solves a problem worth solving.",
-  },
-  {
-    title: "Go deep on systems.",
-    description:
-      "I want to deeply understand the machinery underneath: databases, compilers, operating systems. Not just to use them — but to build them.",
-  },
-  {
-    title: "Start a company.",
-    description:
-      "Eventually I want to build something from zero. A product, a team, a culture. I'm drawn to the full-stack challenge of entrepreneurship.",
-  },
-  {
-    title: "Contribute meaningfully to open source.",
-    description:
-      "I want to give back to the ecosystem that shaped how I learned. Not just one-off PRs — sustained, impactful contribution to projects people rely on.",
-  },
-  {
-    title: "Keep learning, always.",
-    description:
-      "Technology moves fast. I want to stay curious — picking up new languages, domains, and ideas — long after it stops being comfortable.",
-  },
+const statements = [
+  { n: "I", text: "Ship things that reach people." },
+  { n: "II", text: "Go deep on systems." },
+  { n: "III", text: "Start something from zero." },
+  { n: "IV", text: "Make music that lasts." },
+  { n: "V", text: "Stay curious." },
 ];
 
 export function Ambitions() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const items = container.querySelectorAll<HTMLElement>(".reveal-item");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).style.opacity = "1";
-            (entry.target as HTMLElement).style.transform = "translateY(0)";
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    items.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section className="bg-[#000] py-[92px] pb-[140px] px-6">
+    <section className="bg-[#000] py-24 px-6 border-t border-[#1d1d1f]">
       <div className="max-w-[980px] mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-[12px] font-semibold text-[#a1a1a6] uppercase tracking-[0.08em] mb-4">
-            Ambitions
-          </p>
-          <h2 className="text-[48px] leading-[1.08] font-semibold tracking-[-0.003em] text-[#f5f5f7]">
-            Where I&apos;m headed.
-          </h2>
-        </div>
+        <h2 className="text-[clamp(32px,5vw,56px)] font-semibold tracking-[-0.025em] text-[#f5f5f7] leading-none mb-12">
+          Aimed at
+        </h2>
 
-        <div ref={containerRef} className="flex flex-col gap-3">
-          {ambitions.map((item, i) => (
+        <div>
+          {statements.map((s, i) => (
             <div
-              key={item.title}
-              className="reveal-item bg-[#1d1d1f] rounded-[18px] px-10 py-8 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 items-start"
-              style={{
-                opacity: 0,
-                transform: "translateY(24px)",
-                transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s`,
-              }}
+              key={s.n}
+              className="group flex items-baseline gap-6 py-6 border-t border-[#1d1d1f] hover:border-[#3a3a3c] transition-colors"
             >
-              <h3 className="text-[21px] font-semibold text-[#f5f5f7] tracking-[-0.003em] leading-[1.25]">
-                {item.title}
-              </h3>
-              <p className="text-[17px] leading-[1.47] text-[#a1a1a6]">
-                {item.description}
+              <span className="font-mono text-[11px] text-[#424245] w-6 shrink-0 pt-0.5">
+                {s.n}
+              </span>
+              <p className="text-[clamp(22px,3.5vw,40px)] font-semibold text-[#3a3a3c] group-hover:text-[#f5f5f7] tracking-[-0.02em] leading-tight transition-colors duration-300">
+                {s.text}
               </p>
             </div>
           ))}
+          <div className="border-t border-[#1d1d1f]" />
         </div>
       </div>
     </section>
