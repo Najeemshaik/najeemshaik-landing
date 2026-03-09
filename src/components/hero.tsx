@@ -1,48 +1,55 @@
 export function Hero() {
   return (
-    <section className="min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-24 border-b border-border">
-      <div className="max-w-4xl">
-        <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6 font-mono">
+    <section className="relative min-h-screen bg-black flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+      {/* Subtle radial gradient for depth */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,255,255,0.04) 0%, transparent 70%)",
+        }}
+      />
+
+      <div className="relative z-10 flex flex-col items-center">
+        <p
+          className="text-[#a1a1a6] text-[12px] font-semibold uppercase tracking-[0.08em] mb-5"
+        >
           Software Engineer
         </p>
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-none mb-8">
-          Najeem
+
+        <h1
+          className="text-[56px] leading-[1.07] font-semibold tracking-[-0.022em] text-[#f5f5f7] max-w-[700px]"
+          style={{ lineHeight: "1.07" }}
+        >
+          Built for the people
           <br />
-          <span className="text-muted-foreground">Shaik</span>
+          <span className="text-[#a1a1a6]">who build things.</span>
         </h1>
-        <p className="text-muted-foreground text-lg md:text-xl max-w-xl leading-relaxed">
-          I build things on the web. Passionate about clean code, great user
-          experiences, and pushing the limits of what&apos;s possible.
+
+        <p className="mt-6 text-[19px] leading-[1.47] text-[#a1a1a6] max-w-[502px]">
+          Hi, I&apos;m Najeem Shaik. I engineer clean, scalable software and
+          obsess over the details that make products feel inevitable.
         </p>
-        <div className="flex gap-6 mt-12">
+
+        <div className="mt-9 flex items-center gap-5 flex-wrap justify-center">
           <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors tracking-widest uppercase"
+            href="#projects"
+            className="inline-flex items-center justify-center bg-[#f5f5f7] text-black text-[17px] font-normal px-5 py-2 rounded-full tracking-[-0.022em] hover:bg-white transition-colors duration-300"
           >
-            GitHub
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors tracking-widest uppercase"
-          >
-            LinkedIn
+            View my work
           </a>
           <a
             href="mailto:najeem@example.com"
-            className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors tracking-widest uppercase"
+            className="text-[#2997ff] text-[17px] font-normal tracking-[-0.022em] hover:underline"
           >
-            Email
+            Get in touch ›
           </a>
         </div>
       </div>
-      <div className="absolute bottom-8 left-6 md:left-16 lg:left-24">
-        <span className="text-muted-foreground font-mono text-xs tracking-widest">
-          SCROLL ↓
-        </span>
+
+      {/* Scroll cue */}
+      <div className="absolute bottom-10 flex flex-col items-center gap-2">
+        <div className="w-[1px] h-10 bg-gradient-to-b from-transparent to-[#424245]" />
       </div>
     </section>
   );
