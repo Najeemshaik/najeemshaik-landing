@@ -151,10 +151,10 @@ function EyesLayer() {
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen bg-white flex flex-col justify-between px-6 md:px-16 py-16 overflow-hidden">
+    <section className="relative min-h-screen w-full max-w-[1700px] mx-auto bg-white flex flex-col justify-between px-6 md:px-16 py-16 overflow-hidden">
 
       {/* Body + eyes — same canvas size, eyes behind body */}
-      <div className="absolute bottom-0 right-[-8%] h-[115%] w-auto pointer-events-none select-none">
+      <div className="absolute bottom-0 right-0 h-[115%] w-auto pointer-events-none select-none">
         <EyesLayer />
         {/* Body layer — on top */}
         <Image
@@ -168,11 +168,8 @@ export function Hero() {
         />
       </div>
 
-      {/* Top nav */}
-      <div className="flex items-center justify-between relative z-10">
-        <span className="text-[13px] font-mono text-[#6e6e73] tracking-widest uppercase">
-          Najeem Shaik
-        </span>
+      {/* Top-left links */}
+      <div className="flex items-center relative z-10">
         <div className="flex gap-7">
           {links.map((l) => (
             <MagneticLink key={l.label} {...l} />
