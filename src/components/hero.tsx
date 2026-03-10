@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { useMagnetic } from "@/hooks/use-magnetic";
 
 const links = [
@@ -81,8 +82,34 @@ function TiltName() {
 export function Hero() {
   return (
     <section className="relative min-h-screen bg-white flex flex-col justify-between px-6 md:px-16 py-16 overflow-hidden">
+
+      {/* Body + eyes — same canvas size, eyes behind body */}
+      <div className="absolute bottom-0 right-[-8%] h-[115%] w-auto pointer-events-none select-none">
+        {/* Eyes layer — behind body */}
+        <Image
+          src="/eyes.png"
+          alt=""
+          height={6000}
+          width={4000}
+          quality={100}
+          className="absolute inset-0 h-full w-auto object-contain object-bottom"
+          priority
+          aria-hidden
+        />
+        {/* Body layer — on top */}
+        <Image
+          src="/body.png"
+          alt="Najeem"
+          height={6000}
+          width={4000}
+          quality={100}
+          className="relative h-full w-auto object-contain object-bottom"
+          priority
+        />
+      </div>
+
       {/* Top nav */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between relative z-10">
         <span className="text-[13px] font-mono text-[#6e6e73] tracking-widest uppercase">
           Najeem Shaik
         </span>
@@ -94,12 +121,12 @@ export function Hero() {
       </div>
 
       {/* Name */}
-      <div className="flex-1 flex flex-col justify-center">
+      <div className="flex-1 flex flex-col justify-center relative z-10">
         <TiltName />
       </div>
 
       {/* Bottom row */}
-      <div className="flex items-end justify-between">
+      <div className="flex items-end justify-between relative z-10">
         <p className="text-[13px] text-[#6e6e73] font-mono max-w-[280px] leading-relaxed">
           Software engineer ·{" "}
           <br className="hidden md:block" />
