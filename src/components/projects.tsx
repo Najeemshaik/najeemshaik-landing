@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
 const projects = [
   {
@@ -45,78 +45,97 @@ const projects = [
   },
 ];
 
-// SVG arrow that draws itself on hover
 function DrawArrow() {
   return (
     <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
       fill="none"
-      className="shrink-0 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"
+      className="shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300"
     >
       <path
-        d="M4 16L16 4M16 4H7M16 4V13"
+        d="M3.5 14.5L14.5 3.5M14.5 3.5H6.5M14.5 3.5V11.5"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.4"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="[stroke-dasharray:40] [stroke-dashoffset:40] group-hover:[stroke-dashoffset:0] transition-all duration-500"
+        className="[stroke-dasharray:36] [stroke-dashoffset:36] group-hover:[stroke-dashoffset:0] transition-all duration-400"
       />
     </svg>
   );
 }
 
+// Subtle vertical magnetic pull on each row
+function ProjectRow({ p }: { p: typeof projects[0] }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  const onMove = useCallback((e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const dy = (e.clientY - rect.top - rect.height / 2) * 0.08;
+    el.style.transform = `translateY(${dy}px)`;
+    el.style.transition = "transform 0.1s ease-out";
+  }, []);
+
+  const onLeave = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.transform = "translateY(0)";
+    el.style.transition = "transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+  }, []);
+
+  return (
+    <a
+      ref={ref}
+      href={p.link}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="group flex items-center justify-between py-5 border-t border-[#d2d2d7] hover:border-[#1d1d1f] transition-colors duration-200"
+    >
+      <div className="flex items-center gap-6 min-w-0">
+        <span className="font-mono text-[11px] text-[#d2d2d7] w-5 shrink-0">{p.index}</span>
+        <span className="text-[#1d1d1f] text-[18px] font-medium tracking-[-0.01em] truncate">
+          {p.name}
+        </span>
+        <span className="hidden md:block text-[13px] text-[#6e6e73] font-mono">{p.discipline}</span>
+      </div>
+      <div className="flex items-center gap-5 shrink-0 ml-4">
+        <div className="hidden md:flex gap-3">
+          {p.stack.map((t) => (
+            <span key={t} className="text-[11px] font-mono text-[#d2d2d7] group-hover:text-[#6e6e73] transition-colors duration-200">
+              {t}
+            </span>
+          ))}
+        </div>
+        <span className="font-mono text-[11px] text-[#6e6e73]">{p.year}</span>
+        <span className="text-[#d2d2d7] group-hover:text-[#1d1d1f] transition-colors duration-200">
+          <DrawArrow />
+        </span>
+      </div>
+    </a>
+  );
+}
+
 export function Projects() {
   return (
-    <section id="projects" className="bg-[#000] py-24 px-6 border-t border-[#1d1d1f]">
+    <section id="projects" className="bg-white py-24 px-6 border-t border-[#d2d2d7]">
       <div className="max-w-[980px] mx-auto">
-
-        {/* Header row */}
-        <div className="flex items-end justify-between mb-3">
-          <h2 className="text-[clamp(32px,5vw,56px)] font-semibold tracking-[-0.025em] text-[#f5f5f7] leading-none">
+        <div className="flex items-end justify-between mb-8">
+          <h2 className="text-[clamp(32px,5vw,56px)] font-semibold tracking-[-0.025em] text-[#1d1d1f] leading-none">
             Work
           </h2>
           <span className="font-mono text-[12px] text-[#6e6e73] pb-1">
             {projects.length} projects
           </span>
         </div>
-
-        {/* Project rows */}
-        <div className="mt-8">
-          {projects.map((p, i) => (
-            <a
-              key={p.index}
-              href={p.link}
-              className="group flex items-center justify-between py-5 border-t border-[#1d1d1f] hover:border-[#3a3a3c] transition-colors duration-200"
-            >
-              <div className="flex items-center gap-6 min-w-0">
-                <span className="font-mono text-[11px] text-[#424245] w-6 shrink-0">{p.index}</span>
-                <span className="text-[#f5f5f7] text-[18px] font-medium tracking-[-0.01em] group-hover:text-white transition-colors truncate">
-                  {p.name}
-                </span>
-                <span className="hidden md:block text-[13px] text-[#6e6e73] font-mono">{p.discipline}</span>
-              </div>
-
-              <div className="flex items-center gap-6 shrink-0 ml-4">
-                <div className="hidden md:flex gap-2">
-                  {p.stack.map((t) => (
-                    <span key={t} className="text-[11px] font-mono text-[#424245] group-hover:text-[#6e6e73] transition-colors">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <span className="font-mono text-[11px] text-[#424245]">{p.year}</span>
-                <span className="text-[#424245] group-hover:text-[#f5f5f7] transition-colors duration-200">
-                  <DrawArrow />
-                </span>
-              </div>
-            </a>
+        <div>
+          {projects.map((p) => (
+            <ProjectRow key={p.index} p={p} />
           ))}
-          {/* Final border */}
-          <div className="border-t border-[#1d1d1f]" />
+          <div className="border-t border-[#d2d2d7]" />
         </div>
-
       </div>
     </section>
   );

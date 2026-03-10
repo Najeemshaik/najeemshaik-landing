@@ -17,11 +17,6 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -34,39 +29,33 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 :root {
-  --background: #000000;
-  --foreground: #f5f5f7;
-  --card: #1d1d1f;
-  --card-foreground: #f5f5f7;
-  --popover: #1d1d1f;
-  --popover-foreground: #f5f5f7;
-  --primary: #f5f5f7;
-  --primary-foreground: #000000;
-  --secondary: #2d2d2f;
-  --secondary-foreground: #f5f5f7;
-  --muted: #1d1d1f;
-  --muted-foreground: #a1a1a6;
-  --accent: #3a3a3c;
-  --accent-foreground: #f5f5f7;
-  --destructive: oklch(0.58 0.22 27);
-  --border: #424245;
-  --input: #3a3a3c;
+  /* ── Light mode tokens ── */
+  --background: #ffffff;
+  --foreground: #1d1d1f;
+  --card: #f5f5f7;
+  --card-foreground: #1d1d1f;
+  --muted: #f5f5f7;
+  --muted-foreground: #6e6e73;
+  --border: #d2d2d7;
+  --input: #e8e8ed;
   --ring: #6e6e73;
-  --radius: 18px;
+  --radius: 16px;
+  --primary: #1d1d1f;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f7;
+  --secondary-foreground: #1d1d1f;
+  --accent: #e8e8ed;
+  --accent-foreground: #1d1d1f;
+  --destructive: oklch(0.58 0.22 27);
 }
 
 @layer base {
@@ -75,24 +64,24 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
   html {
-    @apply font-sans;
     scroll-behavior: smooth;
   }
 }
 
 /* ── EQ bars ── */
 @keyframes eq {
-  0%, 100% { height: 4px;  opacity: 0.4; }
-  50%       { height: 36px; opacity: 1;   }
+  0%, 100% { height: 4px;  opacity: 0.35; }
+  50%       { height: 32px; opacity: 1;    }
 }
 .animate-eq {
   animation: eq 0.6s ease-in-out infinite alternate;
 }
 
-/* ── Marquee ── */
+/* ── Marquee (horizontal, truly infinite) ── */
 @keyframes marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -101,34 +90,24 @@
   0%   { transform: translateX(-50%); }
   100% { transform: translateX(0); }
 }
-.animate-marquee         { animation: marquee 28s linear infinite; }
-.animate-marquee-reverse { animation: marquee-reverse 28s linear infinite; }
+.animate-marquee         { animation: marquee 36s linear infinite; }
+.animate-marquee-reverse { animation: marquee-reverse 36s linear infinite; }
 
 /* ── Video timeline bars ── */
 @keyframes timeline {
-  0%, 100% { opacity: 0.25; transform: scaleY(0.5); }
-  50%       { opacity: 0.7;  transform: scaleY(1);   }
+  0%, 100% { opacity: 0.2; transform: scaleY(0.4); }
+  50%       { opacity: 0.6; transform: scaleY(1);   }
 }
 .animate-timeline {
   animation: timeline 1.2s ease-in-out infinite alternate;
   transform-origin: bottom;
 }
 
-/* ── Stack vertical scroll ── */
+/* ── Vertical infinite scroll (stack cell) ── */
 @keyframes stack-scroll {
   0%   { transform: translateY(0); }
   100% { transform: translateY(-50%); }
 }
-.animate-stack-scroll { animation: stack-scroll 8s linear infinite; }
-
-/* ── Scroll reveal ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+.animate-stack-scroll {
+  animation: stack-scroll 10s linear infinite;
 }
