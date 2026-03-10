@@ -79,23 +79,83 @@ function TiltName() {
   );
 }
 
-export function Hero() {
-  return (
-    <section className="relative min-h-screen bg-white flex flex-col justify-between px-6 md:px-16 py-16 overflow-hidden">
+// Eyes follow cursor — offset relative to eye position in image
+function EyesLayer() {
+  const wrapRef = useRef<HTMLDivElement>(null); // the outer image container
+  const eyesRef = useRef<HTMLDivElement>(null); // the translating div
+  const target = useRef({ x: 0, y: 0 });
+  const current = useRef({ x: 0, y: 0 });
+  const raf = useRef(0);
 
-      {/* Body + eyes — same canvas size, eyes behind body */}
-      <div className="absolute bottom-0 right-[-8%] h-[115%] w-auto pointer-events-none select-none">
-        {/* Eyes layer — behind body */}
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const wrap = wrapRef.current;
+      if (!wrap) return;
+      const rect = wrap.getBoundingClientRect();
+
+      // Eye center in the image — approx 28% from top, 50% horizontally
+      const eyeX = rect.left + rect.width * 0.50;
+      const eyeY = rect.top + rect.height * 0.28;
+
+      // Vector from eye to cursor
+      const dx = e.clientX - eyeX;
+      const dy = e.clientY - eyeY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      // Max travel in px — eyes move toward cursor, zero when cursor is on eye
+      const MAX_L = 8;
+      const MAX_R = 0.3; // body already angled right — less travel needed
+      const MAX_X = dx > 0 ? MAX_R : MAX_L;
+      const MAX_Y = 8;
+      const scale = Math.min(dist, 200) / 200; // ramps up over 200px distance
+      target.current = {
+        x: (dx / (dist || 1)) * scale * MAX_X,
+        y: (dy / (dist || 1)) * scale * MAX_Y,
+      };
+    };
+
+    const tick = () => {
+      current.current.x += (target.current.x - current.current.x) * 0.08;
+      current.current.y += (target.current.y - current.current.y) * 0.08;
+      if (eyesRef.current) {
+        eyesRef.current.style.transform = `translate(${current.current.x.toFixed(2)}px, ${current.current.y.toFixed(2)}px)`;
+      }
+      raf.current = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    raf.current = requestAnimationFrame(tick);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf.current);
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="absolute inset-0">
+      <div ref={eyesRef} className="absolute inset-0 will-change-transform">
         <Image
           src="/eyes.png"
           alt=""
           height={6000}
           width={4000}
           quality={100}
-          className="absolute inset-0 h-full w-auto object-contain object-bottom"
+          className="h-full w-auto object-contain object-bottom"
           priority
           aria-hidden
         />
+      </div>
+    </div>
+  );
+}
+
+export function Hero() {
+  return (
+    <section className="relative min-h-screen bg-white flex flex-col justify-between px-6 md:px-16 py-16 overflow-hidden">
+
+      {/* Body + eyes — same canvas size, eyes behind body */}
+      <div className="absolute bottom-0 right-[-8%] h-[115%] w-auto pointer-events-none select-none">
+        <EyesLayer />
         {/* Body layer — on top */}
         <Image
           src="/body.png"
